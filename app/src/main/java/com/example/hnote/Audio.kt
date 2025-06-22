@@ -18,7 +18,7 @@ class Audio @OptIn(UnstableApi::class) constructor
         Log.d("my tag","why is this not happening")
 
         player = ExoPlayer.Builder(context).build()
-        val mediaItem = MediaItem.fromUri("asset:///immortal-smoke.mp3")
+        val mediaItem = MediaItem.fromUri(CurrentSong)
         val dataSourceFactory = DefaultDataSource.Factory(context)
         val mediaSource = ProgressiveMediaSource.Factory(dataSourceFactory).createMediaSource(mediaItem)
 

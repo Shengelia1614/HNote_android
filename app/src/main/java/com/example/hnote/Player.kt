@@ -1,6 +1,7 @@
 package com.example.hnote
 
 
+import android.content.Context
 import android.media.audiofx.Visualizer
 import android.os.Bundle
 import android.util.Log
@@ -37,6 +38,8 @@ private const val ARG_PARAM2 = "param2"
 class Player  : Fragment() {
     private var _binding: FragmentPlayerBinding? = null
     private val binding get() = _binding!!
+    val contxt: Context
+        get() = requireContext()
 
     companion object {
         private const val ARG_TEXT = "arg_text"
@@ -47,7 +50,8 @@ class Player  : Fragment() {
             }
             return fragment
         }
-        var playing = 0
+
+        lateinit public var audio : Audio
     }
 
     override fun onCreateView(
@@ -74,9 +78,14 @@ class Player  : Fragment() {
         }
 
 
-        val audio=Audio(requireContext())
+        audio =Audio(requireActivity())
 
         binding.play.setOnClickListener {
+            if(audioStopped==1){
+                audio =Audio(requireActivity())
+                audioStopped=0
+
+            }
             if(playing==0){
                 playing = 1
                 audio.player.play()
@@ -92,6 +101,20 @@ class Player  : Fragment() {
         }
 
     }
+
+    override fun onResume() {
+        if(playing==0){
+            binding.play.setImageResource(R.drawable.playbutton_bc)
+
+
+        }else{
+
+            binding.play.setImageResource(R.drawable.pausebutton_bc)
+        }
+        super.onResume()
+
+    }
+
 
     override fun onDestroyView() {
         super.onDestroyView()

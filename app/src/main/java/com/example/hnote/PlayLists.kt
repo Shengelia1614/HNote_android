@@ -64,11 +64,7 @@ class PlayLists : Fragment() {
     private fun openPlaylistDetail(playlist: PlayList) {
         Log.d("PlayListsFragment", "openPlaylistDetail called with: ${playlist.name}")
 
-        val fragment = MusicsFragment.newInstance(playlist.name, playlist.MusicList)
-        parentFragmentManager.beginTransaction()
-            .replace(R.id.fragmentContainerView, fragment)
-            .addToBackStack(null)
-            .commit()
+        (parentFragment as? PlayListHost)?.openPlaylistDetail(playlist)
     }
 
     override fun onDestroyView() {

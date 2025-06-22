@@ -14,7 +14,7 @@ import com.example.hnote.databinding.ItemExampleBinding
 class Adapter (fragmentActivity: FragmentActivity) : FragmentStateAdapter(fragmentActivity) {
     private val fragments = listOf(
         Player.newInstance("Page 1"),
-        PlayLists.newInstance("Page 2"),
+        PlayListHost(),
         //PageFragment.newInstance("Page 3")
     )
 
