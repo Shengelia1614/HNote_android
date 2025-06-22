@@ -1,31 +1,36 @@
 package com.example.hnote
 
+import android.content.Intent
+import android.os.Bundle
+import android.provider.Settings.Global.putString
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.example.hnote.MusicsFragment
+import com.example.hnote.databinding.ItemPlaylistBinding
 
-class PlayListAdapter (
-    private val playlists: Play_Lists,
-    private val onClick: (PlayList) -> Unit
-) : RecyclerView.Adapter<PlayListAdapter.MusicViewHolder>() {
+class PlaylistAdapter(
+    private val playlists: List<PlayList>,
+    private val onItemClick: (PlayList) -> Unit
+) : RecyclerView.Adapter<PlaylistAdapter.PlaylistViewHolder>() {
 
-    inner class MusicViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val title = itemView.findViewById<TextView>(R.id.Playlist)
+    inner class PlaylistViewHolder(val binding: ItemPlaylistBinding) : RecyclerView.ViewHolder(binding.root)
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PlaylistViewHolder {
+        val binding = ItemPlaylistBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return PlaylistViewHolder(binding)
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MusicViewHolder {
-        val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.item_example, parent, false)
-        return MusicViewHolder(view)
+    override fun onBindViewHolder(holder: PlaylistViewHolder, position: Int) {
+        val playlist = playlists[position]
+        holder.binding.playlistName.text = playlist.name
+        holder.binding.root.setOnClickListener {
+            Log.d("PlaylistAdapter", "Clicked playlist: ${playlist.name}")
+            onItemClick(playlist) }
     }
 
-    override fun onBindViewHolder(holder: MusicViewHolder, position: Int) {
-        val playlist = playlists.playlists[position]
-        holder.title.text = playlist.
-        holder.itemView.setOnClickListener { onClick(song) }
-    }
-
-    override fun getItemCount() = playlists.playlists.size
+    override fun getItemCount() = playlists.size
 }

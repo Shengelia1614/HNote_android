@@ -1,6 +1,7 @@
 package com.example.hnote
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -8,6 +9,7 @@ import android.view.ViewGroup
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updatePadding
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.hnote.databinding.FragmentPlayListsBinding
 import com.example.hnote.databinding.FragmentPlayerBinding
 
@@ -22,9 +24,9 @@ private const val ARG_PARAM2 = "param2"
  * create an instance of this fragment.
  */
 class PlayLists : Fragment() {
-
     private var _binding: FragmentPlayListsBinding? = null
     private val binding get() = _binding!!
+
 
     companion object {
         private const val ARG_TEXT = "arg_text"
@@ -38,23 +40,39 @@ class PlayLists : Fragment() {
 
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+    private lateinit var playlists: List<PlayList>
+
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
         _binding = FragmentPlayListsBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+        playlists = listOf(PlayList(requireContext()))
 
-        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { v, insets ->
-            val systemBarsInsets = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.updatePadding(bottom = systemBarsInsets.bottom)
-            insets
+        binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
+        binding.recyclerView.adapter = PlaylistAdapter(playlists) { playlist ->
+            openPlaylistDetail(playlist)
         }
-
-
-
     }
 
+    private fun openPlaylistDetail(playlist: PlayList) {
+        Log.d("PlayListsFragment", "openPlaylistDetail called with: ${playlist.name}")
 
+        val fragment = MusicsFragment.newInstance(playlist.name, playlist.MusicList)
+        parentFragmentManager.beginTransaction()
+            .replace(R.id.fragmentContainerView, fragment)
+            .addToBackStack(null)
+            .commit()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
 }

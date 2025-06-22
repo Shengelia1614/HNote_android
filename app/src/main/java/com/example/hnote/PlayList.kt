@@ -6,11 +6,14 @@ import android.provider.MediaStore
 
 class PlayList(private val context: Context, Folder: String="") {
     lateinit var MusicList: List<String>
+    lateinit var name: String
     init {
         if(Folder==""){
             MusicList= getAllAudioFilePaths()
+            name="all"
         }else{
 
+            name="something"
         }
     }
 
