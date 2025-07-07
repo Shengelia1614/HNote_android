@@ -1,6 +1,8 @@
 package com.example.hnote
 
 
+import android.animation.ObjectAnimator
+import android.animation.ValueAnimator
 import android.content.Context
 import android.media.audiofx.Visualizer
 import android.os.Bundle
@@ -8,6 +10,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.annotation.OptIn
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
@@ -21,6 +24,8 @@ import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.exoplayer.source.ProgressiveMediaSource
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.hnote.databinding.FragmentPlayerBinding
+import androidx.media3.common.Player as MediaPlayer
+
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -38,6 +43,14 @@ private const val ARG_PARAM2 = "param2"
 class Player  : Fragment() {
     private var _binding: FragmentPlayerBinding? = null
     private val binding get() = _binding!!
+
+
+
+
+    public fun getBind(): FragmentPlayerBinding{
+        return binding
+    }
+
     val contxt: Context
         get() = requireContext()
 
@@ -52,6 +65,8 @@ class Player  : Fragment() {
         }
 
         lateinit public var audio : Audio
+        lateinit public var progress: ObjectAnimator
+        lateinit public var progresingbar: ValueAnimator
     }
 
     override fun onCreateView(
@@ -63,7 +78,6 @@ class Player  : Fragment() {
 
 
     }
-
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -79,41 +93,118 @@ class Player  : Fragment() {
 
 
         audio =Audio(requireActivity())
+        //val Trackwidth= IntArray(2)
 
-        binding.play.setOnClickListener {
-            if(audioStopped==1){
-                audio =Audio(requireActivity())
-                audioStopped=0
 
+        audio.player.addListener(object : MediaPlayer.Listener {
+            override fun onPlaybackStateChanged(playbackState: Int) {
+                if (playbackState == MediaPlayer.STATE_READY) {
+
+
+                    binding.progressCircle.post {
+
+
+                        binding.progressCircle.translationX = 0f
+                        val t1 = binding.progressCircle.x
+                        val temp=binding.progressTrack.x
+                        val t2 = binding.progressTrack.width.toFloat()
+                        Log.d("progress", "Animator from $t1 to $t2")
+
+                        progress = ObjectAnimator.ofFloat(binding.progressCircle, "translationX", 0f, t2)
+                        progress.duration = audio.player.duration
+                        binding.progressTrack.post{
+                            progress.start()
+                            progress.pause()
+                        }
+
+                        Log.d("progress", "start from $t1 to $temp")
+                    }
+                    binding.progressingTrack.post {
+
+//                        var temp2 = (binding.progressTrack.x + binding.progressTrack.width.toFloat()).toFloat() / 8f
+//
+//
+//                        progresingbar = ObjectAnimator.ofFloat(binding.progressingTrack, "scaleX", 1f, temp2)
+//                        progresingbar.duration = audio.player.duration
+                        progresingbar = ValueAnimator.ofInt(0, binding.progressTrack.width)
+                        progresingbar.duration = audio.player.duration
+                        progresingbar.addUpdateListener { animation ->
+                            val animatedValue = animation.animatedValue as Int
+
+                            val layoutParams = binding.progressingTrack.layoutParams
+                            layoutParams.width = animatedValue
+                            binding.progressingTrack.layoutParams = layoutParams
+                        }
+
+                        progresingbar.start()
+                        progresingbar.pause()
+                    }
+
+//                    if(audioStopped==1){
+//                        //audio =Audio(requireActivity())
+//                        audioStopped=0
+//                        //if (::progress.isInitialized) {
+//
+//
+//                        //}
+//                    }
+
+                    binding.play.setOnClickListener {
+
+                        if(playing==0){
+                            playing = 1
+                            audio.player.play()
+                            //if (::progress.isInitialized) {
+
+                                progress.resume()
+                                Log.d("progress", "animation started")
+                            //}
+                            //if (::progresingbar.isInitialized) {
+
+                                progresingbar.resume()
+                                Log.d("progress", "animation started")
+                            //}
+                            binding.play.setImageResource(R.drawable.pausebutton_bc)
+
+
+                        }else{
+                            playing=0
+                            audio.player.pause()
+                            //if (::progress.isInitialized) {
+                                progress.pause()
+                            //}
+                            audio.player.pause()
+                            //if (::progresingbar.isInitialized) {
+                                progresingbar.pause()
+                            //}
+                            binding.play.setImageResource(R.drawable.playbutton_bc)
+                        }
+
+                    }
+
+
+
+                    Log.d("Audio", "Player is ready!")
+                }
             }
-            if(playing==0){
-                playing = 1
-                audio.player.play()
-                binding.play.setImageResource(R.drawable.pausebutton_bc)
+        })
 
 
-            }else{
-                playing=0
-                audio.player.pause()
-                binding.play.setImageResource(R.drawable.playbutton_bc)
-            }
-
-        }
 
     }
 
-    override fun onResume() {
-        if(playing==0){
-            binding.play.setImageResource(R.drawable.playbutton_bc)
-
-
-        }else{
-
-            binding.play.setImageResource(R.drawable.pausebutton_bc)
-        }
-        super.onResume()
-
-    }
+//    override fun onResume() {
+//        if(playing==0){
+//            binding.play.setImageResource(R.drawable.playbutton_bc)
+//
+//
+//        }else{
+//
+//            binding.play.setImageResource(R.drawable.pausebutton_bc)
+//        }
+//        super.onResume()
+//
+//    }
 
 
     override fun onDestroyView() {

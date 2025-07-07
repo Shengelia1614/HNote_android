@@ -13,17 +13,21 @@ import androidx.activity.contextaware.ContextAware
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updatePadding
+import androidx.media3.common.Player
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.hnote.Player.Companion.audio
+import com.example.hnote.Player.Companion.progresingbar
+import com.example.hnote.Player.Companion.progress
 //import com.example.hnote.databinding.FragmentPlayListsBinding
 import com.example.hnote.databinding.FragmentPlayerBinding
 import com.example.hnote.databinding.ItemMusicBinding
-
+import androidx.media3.common.Player as MediaPlayer
 
 class MusicAdapter(private val songs: List<String>, val ac_context: Context) : RecyclerView.Adapter<MusicAdapter.SongViewHolder>() {
     inner class SongViewHolder(val binding: ItemMusicBinding) : RecyclerView.ViewHolder(binding.root)
 
+    val mainActivity = ac_context as? MainActivity
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SongViewHolder {
@@ -38,12 +42,43 @@ class MusicAdapter(private val songs: List<String>, val ac_context: Context) : R
         holder.binding.musicList.text = songs[position]
         holder.binding.root.setOnClickListener {
             CurrentSong=songs[position]
-            Player.audio.player.stop()
+
+            audio.player.stop()
 
             audio =Audio(ac_context)
-            Player.audio.player.play()
 
-            playing=1
+
+            audio.player.addListener(object : MediaPlayer.Listener {
+                override fun onPlaybackStateChanged(playbackState: Int) {
+                    if (playbackState == MediaPlayer.STATE_READY) {
+                        progress.cancel()
+
+                        progress.duration = audio.player.duration
+                        progress.start()
+
+                        Log.d("progress", "animation canceled")
+                        //}
+                        //if (::progresingbar.isInitialized){
+                        progresingbar.cancel()
+
+                        progresingbar.duration = audio.player.duration
+                        progresingbar.start()
+
+
+                    }
+
+                }
+            })
+
+
+
+
+            audio.player.play()
+            mainActivity?.GetPlayer()?.getBind()?.play?.setImageResource(R.drawable.pausebutton_bc)
+
+
+            //playing=1
+            //audioStopped==1
 
         }
 

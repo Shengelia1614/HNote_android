@@ -40,6 +40,7 @@ class MainActivity : AppCompatActivity() {
         pagerAdapter = Adapter(this)
         binding.viewPager.adapter = pagerAdapter
 
+        binding.viewPager.offscreenPageLimit = 3
         // Disable swipe animations when changing via BottomNav (optional)
         binding.viewPager.isUserInputEnabled = true
 
@@ -60,6 +61,11 @@ class MainActivity : AppCompatActivity() {
             }
         })
     }
+
+    public fun GetPlayer(): Player{
+        return pagerAdapter.player
+    }
+
     @OptIn(UnstableApi::class)
     private fun initializeApp() {
         Log.d("my tag","why is this not happening")
