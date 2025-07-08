@@ -6,6 +6,7 @@ import android.animation.ValueAnimator
 import android.content.Context
 import android.media.audiofx.Visualizer
 import android.os.Bundle
+import android.text.TextUtils.split
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -23,6 +24,7 @@ import androidx.media3.datasource.DefaultDataSource
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.exoplayer.source.ProgressiveMediaSource
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.hnote.MainActivity.Companion.Play_lists_db
 import com.example.hnote.databinding.FragmentPlayerBinding
 import androidx.media3.common.Player as MediaPlayer
 
@@ -96,6 +98,9 @@ class Player  : Fragment() {
         //val Trackwidth= IntArray(2)
 
 
+        val name=split(Play_lists_db.getLastPlayed(),"/")
+        binding.musicname.text=name[name.size-1]
+
         audio.player.addListener(object : MediaPlayer.Listener {
             override fun onPlaybackStateChanged(playbackState: Int) {
                 if (playbackState == MediaPlayer.STATE_READY) {
@@ -107,7 +112,7 @@ class Player  : Fragment() {
                         binding.progressCircle.translationX = 0f
                         val t1 = binding.progressCircle.x
                         val temp=binding.progressTrack.x
-                        val t2 = binding.progressTrack.width.toFloat()
+                        val t2 = binding.progressTrack.width.toFloat()-binding.progressCircle.width
                         Log.d("progress", "Animator from $t1 to $t2")
 
                         progress = ObjectAnimator.ofFloat(binding.progressCircle, "translationX", 0f, t2)

@@ -16,6 +16,7 @@ import androidx.core.view.updatePadding
 import androidx.media3.common.Player
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.hnote.MainActivity.Companion.Play_lists_db
 import com.example.hnote.Player.Companion.audio
 import com.example.hnote.Player.Companion.progresingbar
 import com.example.hnote.Player.Companion.progress
@@ -24,7 +25,7 @@ import com.example.hnote.databinding.FragmentPlayerBinding
 import com.example.hnote.databinding.ItemMusicBinding
 import androidx.media3.common.Player as MediaPlayer
 
-class MusicAdapter(private val songs: List<String>, val ac_context: Context) : RecyclerView.Adapter<MusicAdapter.SongViewHolder>() {
+class MusicAdapter(private val songs: List<Pair<String, String>>, val ac_context: Context) : RecyclerView.Adapter<MusicAdapter.SongViewHolder>() {
     inner class SongViewHolder(val binding: ItemMusicBinding) : RecyclerView.ViewHolder(binding.root)
 
     val mainActivity = ac_context as? MainActivity
@@ -39,13 +40,15 @@ class MusicAdapter(private val songs: List<String>, val ac_context: Context) : R
     override fun onBindViewHolder(holder: SongViewHolder, position: Int) {
         Log.d("MusicAdapter", "Binding position: $position → ${songs[position]}")
 
-        holder.binding.musicList.text = songs[position]
+        holder.binding.musicList.text = songs[position].first
         holder.binding.root.setOnClickListener {
-            CurrentSong=songs[position]
+            Play_lists_db.updateLastPlayed(songs[position].second)
 
             audio.player.stop()
 
             audio =Audio(ac_context)
+
+
 
 
             audio.player.addListener(object : MediaPlayer.Listener {
@@ -76,6 +79,7 @@ class MusicAdapter(private val songs: List<String>, val ac_context: Context) : R
             audio.player.play()
             mainActivity?.GetPlayer()?.getBind()?.play?.setImageResource(R.drawable.pausebutton_bc)
 
+            mainActivity?.GetPlayer()?.getBind()?.musicname?.text=songs[position].first
 
             //playing=1
             //audioStopped==1

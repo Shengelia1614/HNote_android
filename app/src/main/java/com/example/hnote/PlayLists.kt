@@ -10,6 +10,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updatePadding
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.hnote.MainActivity.Companion.Play_lists_db
 import com.example.hnote.databinding.FragmentPlayListsBinding
 import com.example.hnote.databinding.FragmentPlayerBinding
 
@@ -40,7 +41,7 @@ class PlayLists : Fragment() {
 
     }
 
-    private lateinit var playlists: List<PlayList>
+    private lateinit var playlists: MutableList<PlayList>
 
 
     override fun onCreateView(
@@ -53,7 +54,14 @@ class PlayLists : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        playlists = listOf(PlayList(requireContext()))
+        playlists = mutableListOf()
+        var pl_lists = Play_lists_db.getAllPlaylistsWithSongs()
+        Log.d("PlayListsFragment", "music count: ${pl_lists[0].second.size} in playlist ${pl_lists[0].first} ")
+        for(pl_list in pl_lists){
+            playlists.add(PlayList(pl_list.first,pl_list.second))
+        }
+
+        Log.d("PlayListsFragment", "music count: ${playlists[0].MusicList.size}")
 
         binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
         binding.recyclerView.adapter = PlaylistAdapter(playlists) { playlist ->

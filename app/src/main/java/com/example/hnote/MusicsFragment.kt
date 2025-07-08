@@ -21,15 +21,29 @@ class MusicsFragment : Fragment() {
     private val binding get() = _binding!!
 
     private lateinit var playlistName: String
-    private lateinit var songs: List<String>
+    //private lateinit var songs: List<String>
+
+//    override fun onCreate(savedInstanceState: Bundle?) {
+//        super.onCreate(savedInstanceState)
+//        arguments?.let {
+//            playlistName = it.getString(ARG_NAME, "") ?: ""
+//            songs = it.getStringArrayList(ARG_SONGS)?.toList() ?: emptyList()
+//        }
+//    }
+    private lateinit var songs: List<Pair<String, String>>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
             playlistName = it.getString(ARG_NAME, "") ?: ""
-            songs = it.getStringArrayList(ARG_SONGS)?.toList() ?: emptyList()
+            val songStrings = it.getStringArrayList(ARG_SONGS) ?: arrayListOf()
+            songs = songStrings.map { str ->
+                val parts = str.split("|", limit = 2)
+                parts[0] to parts.getOrElse(1) { "" }
+            }
         }
     }
+
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         Log.d("MusicsFragment", "onCreateView called for MusicsFragment with playlist: $playlistName")
@@ -56,10 +70,13 @@ class MusicsFragment : Fragment() {
         private const val ARG_NAME = "name"
         private const val ARG_SONGS = "songs"
 
-        fun newInstance(name: String, songs: List<String>) = MusicsFragment().apply {
+        fun newInstance(name: String, songs: List<Pair<String, String>>) = MusicsFragment().apply {
             arguments = Bundle().apply {
                 putString(ARG_NAME, name)
-                putStringArrayList(ARG_SONGS, ArrayList(songs))
+                putStringArrayList(
+                    ARG_SONGS,
+                    ArrayList(songs.map { "${it.first}|${it.second}" }) // Serialize pairs into strings
+                )
             }
         }
     }

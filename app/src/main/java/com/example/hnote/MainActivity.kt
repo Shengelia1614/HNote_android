@@ -1,13 +1,19 @@
 package com.example.hnote
 
 
+import android.content.pm.PackageManager
 import android.media.audiofx.Visualizer
 import android.net.Uri
 import android.os.Bundle
+import android.provider.MediaStore
+import android.text.TextUtils.split
 import android.util.Log
 import androidx.activity.enableEdgeToEdge
 import androidx.annotation.OptIn
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
+import android.Manifest
 
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -17,6 +23,7 @@ import androidx.media3.exoplayer.source.ProgressiveMediaSource
 
 import androidx.media3.common.MediaItem
 import androidx.media3.common.util.UnstableApi
+
 import androidx.media3.datasource.AssetDataSource
 import androidx.media3.datasource.DefaultDataSource
 
@@ -31,6 +38,12 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var pagerAdapter: Adapter
+    companion object{
+        public lateinit var Play_lists_db: MusicDataBaseController
+
+    }
+    private val REQUEST_CODE = 100
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -60,6 +73,112 @@ class MainActivity : AppCompatActivity() {
                 binding.bottomNavigationView.menu.getItem(position).isChecked = true
             }
         })
+
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU) {
+            // Android 13+ uses READ_MEDIA_AUDIO
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_MEDIA_AUDIO) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.READ_MEDIA_AUDIO), REQUEST_CODE)
+            }
+        } else {
+            // Android 12 and below use READ_EXTERNAL_STORAGE
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), REQUEST_CODE)
+            }
+        }
+
+        Play_lists_db = MusicDataBaseController(this)
+
+        var allsongs= PlayList("all_songs",getAllAudioFilePaths())
+        Log.d("db creation", "music count ${allsongs.MusicList.size} ")
+        Play_lists_db.createTableFromList(allsongs)
+
+
+    }
+
+    fun getAllAudioFilePaths(): List<Pair<String, String>> {
+//        val audioList = mutableListOf<String>()
+//
+//        val projection = arrayOf(
+//            MediaStore.Audio.Media.DATA // Deprecated but still works for path
+//        )
+//
+//        val uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
+//        val selection = MediaStore.Audio.Media.IS_MUSIC + "!= 0"
+//
+//        this.contentResolver.query(
+//            uri,
+//            projection,
+//            selection,
+//            null,
+//            null
+//        )?.use { cursor ->
+//            val dataColumn = cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DATA)
+//            while (cursor.moveToNext()) {
+//                val path = cursor.getString(dataColumn)
+//                audioList.add(path)
+//            }
+//        }
+//
+//        return audioList
+//        val audioList = mutableListOf<Pair<String, String>>()
+//
+//        val projection = arrayOf(
+//            MediaStore.Audio.Media.DATA // deprecated but works
+//        )
+//
+//        val uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
+//        val selection = "${MediaStore.Audio.Media.IS_MUSIC} != 0"
+//
+//        this.contentResolver.query(
+//            uri,
+//            projection,
+//            selection,
+//            null,
+//            null
+//        )?.use { cursor ->
+//            val dataColumn = cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DATA)
+//            while (cursor.moveToNext()) {
+//                val path = cursor.getString(dataColumn)
+//                val name=split(path,"/")
+//                audioList.add(Pair<String, String>(name[name.size-1],path))
+//            }
+//        }
+//
+//        return audioList
+
+
+        val audioList = mutableListOf<Pair<String, String>>()
+
+        val projection = arrayOf(
+            MediaStore.Audio.Media.DISPLAY_NAME,  // file name
+            MediaStore.Audio.Media.DATA           // file path (deprecated but still works)
+        )
+
+        val selection = "${MediaStore.Audio.Media.IS_MUSIC} != 0"
+        val sortOrder = "${MediaStore.Audio.Media.DISPLAY_NAME} ASC"
+
+        val query = contentResolver.query(
+            MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
+            projection,
+            selection,
+            null,
+            sortOrder
+        )
+
+        query?.use { cursor ->
+            val nameColumn = cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DISPLAY_NAME)
+            val dataColumn = cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DATA)
+
+            while (cursor.moveToNext()) {
+                val name = cursor.getString(nameColumn)
+                val path = cursor.getString(dataColumn)
+                audioList.add(name to path)
+            }
+        }
+
+        Log.d("MainActivity", "Found ${audioList.size} audio files")
+        // Use audioList as needed, e.g. update UI or database
+        return audioList
     }
 
     public fun GetPlayer(): Player{

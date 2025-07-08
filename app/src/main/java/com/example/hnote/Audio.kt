@@ -9,6 +9,7 @@ import androidx.media3.common.util.UnstableApi
 import androidx.media3.datasource.DefaultDataSource
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.exoplayer.source.ProgressiveMediaSource
+import com.example.hnote.MainActivity.Companion.Play_lists_db
 
 class Audio @OptIn(UnstableApi::class) constructor
     (private val context: Context) {
@@ -18,7 +19,9 @@ class Audio @OptIn(UnstableApi::class) constructor
         Log.d("my tag","why is this not happening")
 
         player = ExoPlayer.Builder(context).build()
-        val mediaItem = MediaItem.fromUri(CurrentSong)
+        val uriString = Play_lists_db.getLastPlayed() ?: "asset:///immortal-smoke.mp3"
+
+        val mediaItem = MediaItem.fromUri(uriString)
         val dataSourceFactory = DefaultDataSource.Factory(context)
         val mediaSource = ProgressiveMediaSource.Factory(dataSourceFactory).createMediaSource(mediaItem)
 
