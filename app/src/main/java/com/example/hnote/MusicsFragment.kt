@@ -33,15 +33,18 @@ class MusicsFragment : Fragment() {
     private lateinit var songs: List<Pair<String, String>>
 
     override fun onCreate(savedInstanceState: Bundle?) {
+//        super.onCreate(savedInstanceState)
+//        arguments?.let {
+//            playlistName = it.getString(ARG_NAME, "") ?: ""
+//            val songStrings = it.getStringArrayList(ARG_SONGS) ?: arrayListOf()
+//            songs = songStrings.map { str ->
+//                val parts = str.split("|", limit = 2)
+//                parts[0] to parts.getOrElse(1) { "" }
+//            }
+//        }
         super.onCreate(savedInstanceState)
-        arguments?.let {
-            playlistName = it.getString(ARG_NAME, "") ?: ""
-            val songStrings = it.getStringArrayList(ARG_SONGS) ?: arrayListOf()
-            songs = songStrings.map { str ->
-                val parts = str.split("|", limit = 2)
-                parts[0] to parts.getOrElse(1) { "" }
-            }
-        }
+        playlistName = PlaylistStore.currentPlaylistName
+        songs = PlaylistStore.currentSongs
     }
 
 
@@ -71,13 +74,16 @@ class MusicsFragment : Fragment() {
         private const val ARG_SONGS = "songs"
 
         fun newInstance(name: String, songs: List<Pair<String, String>>) = MusicsFragment().apply {
-            arguments = Bundle().apply {
-                putString(ARG_NAME, name)
-                putStringArrayList(
-                    ARG_SONGS,
-                    ArrayList(songs.map { "${it.first}|${it.second}" }) // Serialize pairs into strings
-                )
-            }
+//            arguments = Bundle().apply {
+//                putString(ARG_NAME, name)
+//                putStringArrayList(
+//                    ARG_SONGS,
+//                    ArrayList(songs.map { "${it.first}|${it.second}" }) // Serialize pairs into strings
+//                )
+//            }
+            PlaylistStore.currentPlaylistName = name
+            PlaylistStore.currentSongs = songs
+            return MusicsFragment()
         }
     }
 }
