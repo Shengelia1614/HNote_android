@@ -4,28 +4,33 @@ package com.example.hnote
 import android.animation.ObjectAnimator
 import android.animation.ValueAnimator
 import android.content.Context
-import android.media.audiofx.Visualizer
 import android.os.Bundle
+import android.os.SystemClock
 import android.text.TextUtils.split
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
+import android.view.animation.LinearInterpolator
+import android.widget.TextView
 import androidx.annotation.OptIn
 import androidx.core.view.ViewCompat
-import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updatePadding
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.media3.common.MediaItem
 import androidx.media3.common.util.UnstableApi
 import androidx.media3.datasource.DefaultDataSource
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.exoplayer.source.ProgressiveMediaSource
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.hnote.MainActivity.Companion.Play_lists_db
 import com.example.hnote.databinding.FragmentPlayerBinding
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.ensureActive
+import kotlinx.coroutines.isActive
+import kotlinx.coroutines.launch
 import androidx.media3.common.Player as MediaPlayer
 
 
@@ -46,8 +51,9 @@ class Player  : Fragment() {
     private var _binding: FragmentPlayerBinding? = null
     private val binding get() = _binding!!
 
-
-
+    var playtime=0L
+    var onPauseTime=0L
+    var myJob: Job? = null
 
     public fun getBind(): FragmentPlayerBinding{
         return binding
@@ -69,6 +75,8 @@ class Player  : Fragment() {
         lateinit public var audio : Audio
         lateinit public var progress: ObjectAnimator
         lateinit public var progresingbar: ValueAnimator
+        lateinit public var rotation1: ObjectAnimator
+        lateinit public var rotation2: ObjectAnimator
     }
 
     override fun onCreateView(
@@ -104,6 +112,9 @@ class Player  : Fragment() {
         audio.player.addListener(object : MediaPlayer.Listener {
             override fun onPlaybackStateChanged(playbackState: Int) {
                 if (playbackState == MediaPlayer.STATE_READY) {
+                    val marqueeText = view.findViewById<TextView>(R.id.musicname)
+                    marqueeText.isSelected = true
+
 
 
                     binding.progressCircle.post {
@@ -144,6 +155,30 @@ class Player  : Fragment() {
                         progresingbar.start()
                         progresingbar.pause()
                     }
+                    binding.cassetteRotation1.post {
+
+                        rotation1 =
+                            ObjectAnimator.ofFloat(binding.cassetteRotation1, "rotation", 0f, 360f)
+                                .apply {
+                                    duration = 5000 // 1 second per rotation
+                                    repeatCount = ObjectAnimator.INFINITE
+                                    interpolator = LinearInterpolator()
+                                    start()
+                                }
+
+                        rotation1.pause()
+
+                    }
+
+                    binding.cassetteRotation2.post {
+                        rotation2 = ObjectAnimator.ofFloat(binding.cassetteRotation2, "rotation", 0f, 360f).apply {
+                            duration = 5000 // 1 second per rotation
+                            repeatCount = ObjectAnimator.INFINITE
+                            interpolator = LinearInterpolator()
+                            start()
+                        }
+                        rotation2.pause()
+                    }
 
 //                    if(audioStopped==1){
 //                        //audio =Audio(requireActivity())
@@ -157,32 +192,70 @@ class Player  : Fragment() {
                     binding.play.setOnClickListener {
 
                         if(playing==0){
-                            playing = 1
-                            audio.player.play()
-                            //if (::progress.isInitialized) {
+                            Play_update()
 
-                                progress.resume()
-                                Log.d("progress", "animation started")
-                            //}
-                            //if (::progresingbar.isInitialized) {
-
-                                progresingbar.resume()
-                                Log.d("progress", "animation started")
-                            //}
-                            binding.play.setImageResource(R.drawable.pausebutton_bc)
-
+//                            playing = 1
+//                            audio.player.play()
+//                            //if (::progress.isInitialized) {
+//
+//                            progress.resume()
+//                            Log.d("progress", "animation started")
+//                            //}
+//                            //if (::progresingbar.isInitialized) {
+//
+//                            progresingbar.resume()
+//                            Log.d("progress", "animation started")
+//                            //}
+//
+//                            var playbackStartTime = SystemClock.elapsedRealtime()
+//                            TimerCoroutineStopper=0
+//
+//                            lifecycleScope.launch {
+//
+//
+//                                while (playtime<audio.player.duration) {
+//                                    if(TimerCoroutineStopper==1){
+//                                        break
+//                                    }
+//                                    playtime = (SystemClock.elapsedRealtime() - playbackStartTime)+onPauseTime
+//                                    //binding.timepast.text = "${(playtime/60000).toLong()}:${((playtime%60000)/1000).toLong()}"
+//                                    binding.timepast.text= String.format("%d:%02d", (playtime/60000).toLong(),  ((playtime%60000)/1000).toLong())
+//
+//                                    delay(1000)
+//                                }
+//                                if(TimerCoroutineStopper==0){
+//                                    playing=0
+//                                    binding.play.setImageResource(R.drawable.playbutton_bc)
+//                                    progress.start()
+//                                    progress.pause()
+//                                    progresingbar.start()
+//                                    progresingbar.pause()
+//                                    playtime=0
+//                                    binding.timepast.text= String.format("%d:%02d", (playtime/60000).toLong(),  ((playtime%60000)/1000).toLong())
+//                                    onPauseTime=0
+//                                }
+//                                onPauseTime=playtime
+//
+//                            }
+//
+//
+//                            binding.play.setImageResource(R.drawable.pausebutton_bc)
+//
 
                         }else{
-                            playing=0
-                            audio.player.pause()
-                            //if (::progress.isInitialized) {
-                                progress.pause()
-                            //}
-                            audio.player.pause()
-                            //if (::progresingbar.isInitialized) {
-                                progresingbar.pause()
-                            //}
-                            binding.play.setImageResource(R.drawable.playbutton_bc)
+                            Stop_update()
+//                            playing=0
+//                            audio.player.pause()
+//                            //if (::progress.isInitialized) {
+//                            progress.pause()
+//                            //}
+//                            audio.player.pause()
+//                            //if (::progresingbar.isInitialized) {
+//                            progresingbar.pause()
+//                            //}
+//                            TimerCoroutineStopper=1
+//
+//                            binding.play.setImageResource(R.drawable.playbutton_bc)
                         }
 
                     }
@@ -211,6 +284,94 @@ class Player  : Fragment() {
 //
 //    }
 
+
+    public fun Play_update(){
+        rotation1.resume()
+        rotation2.resume()
+        playing = 1
+        audio.player.play()
+        //if (::progress.isInitialized) {
+
+        progress.resume()
+        Log.d("progress", "animation started")
+        //}
+        //if (::progresingbar.isInitialized) {
+
+        progresingbar.resume()
+        Log.d("progress", "animation started")
+        //}
+
+        var playbackStartTime = SystemClock.elapsedRealtime()
+
+        Log.d("coroutines","$CoroutinesCount")
+
+
+        myJob = lifecycleScope.launch {
+
+            try {
+                while (isActive) {
+
+                    CoroutinesCount +=1
+
+                    while (playtime<audio.player.duration) {
+
+                        playtime = (SystemClock.elapsedRealtime() - playbackStartTime)+onPauseTime
+                        //binding.timepast.text = "${(playtime/60000).toLong()}:${((playtime%60000)/1000).toLong()}"
+                        binding.timepast.text= String.format("%d:%02d", (playtime/60000).toLong(),  ((playtime%60000)/1000).toLong())
+                        Log.d("timer","$playtime")
+                        delay(1000)
+                        ensureActive()
+                        //onPauseTime=playtime
+                    }
+
+
+
+                    playing=0
+                    Log.d("Coroinside-PlayingState","$playing")
+                    binding.play.setImageResource(R.drawable.playbutton_bc)
+                    progress.start()
+                    progress.pause()
+                    progresingbar.start()
+                    progresingbar.pause()
+                    playtime=0
+                    binding.timepast.text= String.format("%d:%02d", (playtime/60000).toLong(),  ((playtime%60000)/1000).toLong())
+                    onPauseTime=0
+
+
+
+                    delay(1000)
+                }
+            } finally {
+                CoroutinesCount -=1
+                Log.d("Coroutine", "Cleaned up after cancel")
+            }
+
+        }
+        Log.d("coroutines","$CoroutinesCount")
+        Log.d("Coro-PlayingState","$CoroutinesCount")
+
+        binding.play.setImageResource(R.drawable.pausebutton_bc)
+
+
+    }
+    public fun Stop_update(){
+        rotation1.pause()
+        rotation2.pause()
+        playing=0
+        audio.player.pause()
+        //if (::progress.isInitialized) {
+        progress.pause()
+        //}
+        audio.player.pause()
+        //if (::progresingbar.isInitialized) {
+        progresingbar.pause()
+        //}
+
+        myJob?.cancel()
+        onPauseTime=playtime
+        //CoroutinesCount -=1
+        binding.play.setImageResource(R.drawable.playbutton_bc)
+    }
 
     override fun onDestroyView() {
         super.onDestroyView()

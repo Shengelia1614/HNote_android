@@ -11,3 +11,7 @@ object PlaylistStore {
     var currentPlaylistName: String = ""
     var currentSongs: List<Pair<String, String>> = listOf()
 }
+
+var TimerCoroutineStopper=0
+
+var CoroutinesCount=0

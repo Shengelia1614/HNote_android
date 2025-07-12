@@ -3,6 +3,8 @@ package com.example.hnote
 
 import android.content.Context
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -23,6 +25,7 @@ import com.example.hnote.Player.Companion.progress
 //import com.example.hnote.databinding.FragmentPlayListsBinding
 import com.example.hnote.databinding.FragmentPlayerBinding
 import com.example.hnote.databinding.ItemMusicBinding
+
 import androidx.media3.common.Player as MediaPlayer
 
 class MusicAdapter(private val songs: List<Pair<String, String>>, val ac_context: Context) : RecyclerView.Adapter<MusicAdapter.SongViewHolder>() {
@@ -76,11 +79,22 @@ class MusicAdapter(private val songs: List<Pair<String, String>>, val ac_context
 
 
 
-            audio.player.play()
-            mainActivity?.GetPlayer()?.getBind()?.play?.setImageResource(R.drawable.pausebutton_bc)
+            //audio.player.play()
+            //mainActivity?.GetPlayer()?.getBind()?.play?.setImageResource(R.drawable.pausebutton_bc)
+            mainActivity?.GetPlayer()?.Stop_update()
+            //mainActivity?.GetPlayer()?.myJob?.cancel()
 
+            mainActivity?.GetPlayer()?.onPauseTime=0L
+            mainActivity?.GetPlayer()?.playtime=0L
             mainActivity?.GetPlayer()?.getBind()?.musicname?.text=songs[position].first
 
+
+            mainActivity?.GetPlayer()?.Play_update()
+            Log.d("CoroutineProblem","$playing")
+
+            if(playing==0){
+                playing=1
+            }
             //playing=1
             //audioStopped==1
 

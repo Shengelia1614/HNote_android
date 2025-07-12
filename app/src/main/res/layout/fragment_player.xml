@@ -10,82 +10,260 @@
 
 
 
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/layout1"
         >
 
-        <TextView
-            android:id="@+id/musicname"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text=""
-            android:textColor="#D000CC"
-            android:textSize="20dp"
-            app:layout_constraintBottom_toTopOf="@+id/play"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cassette"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@drawable/cassette_bc"
+
+
+            app:layout_constraintBottom_toTopOf="@+id/prbar"
+            app:layout_constraintDimensionRatio="H,90:57"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            android:gravity="center"
-            android:layout_marginBottom="20dp">
+            app:layout_constraintStart_toStartOf="parent">
 
-        </TextView>
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/startGuideline1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.11" />
 
-        <ImageButton
-            android:id="@+id/play"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:backgroundTint="@android:color/transparent"
-            android:contentDescription="Play"
-            android:src="@drawable/playbutton_bc"
+            <!-- End Guideline at 90% (i.e., 100% - 10%) -->
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/endGuideline1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.88" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/VerticalGuideline1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.38" />
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/VerticalGuideline2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.62" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/VerticalGuideline3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.178" />
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/VerticalGuideline4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.335" />
+
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/VerticalGuideline5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.664" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/VerticalGuideline6"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.825" />
+
+
+
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/HorizontalEndGuideline1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_percent="0.24" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/HorizontalEndGuideline2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_percent="0.76" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/HorizontalEndGuideline3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_percent="0.32" />
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/HorizontalEndGuideline4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_percent="0.556" />
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/HorizontalEndGuideline5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_percent="0.305" />
+
+
+            <ImageView
+                android:id="@+id/cassette_rotation1"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="@drawable/cassette_rot_bc"
+                app:layout_constraintBottom_toTopOf="@+id/HorizontalEndGuideline4"
+                app:layout_constraintEnd_toStartOf="@+id/VerticalGuideline4"
+                app:layout_constraintStart_toStartOf="@+id/VerticalGuideline3"
+                app:layout_constraintTop_toTopOf="@id/HorizontalEndGuideline5"
+                >
+
+            </ImageView>
+
+            <ImageView
+                android:id="@+id/cassette_rotation2"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="@drawable/cassette_rot_bc"
+                app:layout_constraintBottom_toTopOf="@+id/HorizontalEndGuideline4"
+
+                app:layout_constraintEnd_toStartOf="@+id/VerticalGuideline6"
+                app:layout_constraintStart_toStartOf="@+id/VerticalGuideline5"
+                app:layout_constraintTop_toTopOf="@id/HorizontalEndGuideline5">
+
+            </ImageView>
+
+
+
+            <TextView
+                android:id="@+id/musicname"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+
+                android:ellipsize="marquee"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:gravity="center"
+                android:marqueeRepeatLimit="marquee_forever"
+                android:scrollHorizontally="true"
+                android:singleLine="true"
+
+
+
+                android:text="whataaaaaat"
+                android:textColor="#FFC400"
+                android:textSize="26dp"
+                app:layout_constraintBottom_toTopOf="@+id/HorizontalEndGuideline1"
+                app:layout_constraintEnd_toStartOf="@+id/endGuideline1"
+                app:layout_constraintStart_toStartOf="@+id/startGuideline1">
+
+            </TextView>
+
+            <TextView
+                android:id="@+id/timepast"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="00"
+                android:textColor="#FFC400"
+                android:textSize="26dp"
+                android:gravity="center"
+                app:layout_constraintBottom_toTopOf="@+id/HorizontalEndGuideline4"
+                app:layout_constraintEnd_toStartOf="@+id/VerticalGuideline2"
+                app:layout_constraintStart_toStartOf="@+id/VerticalGuideline1"
+                app:layout_constraintTop_toTopOf="@+id/HorizontalEndGuideline3">
+
+            </TextView>
+
+            <ImageButton
+                android:id="@+id/play"
+                android:layout_width="55dp"
+                android:layout_height="55dp"
+                android:layout_marginLeft="6dp"
+                android:backgroundTint="@android:color/transparent"
+                android:contentDescription="Play"
+                android:scaleType="fitXY"
+                android:src="@drawable/playbutton_bc"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/HorizontalEndGuideline2"
+                app:tint="#FFAE00" />
+
+            <!-- Track bar background -->
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/prbar"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+
+            android:background="@drawable/progressbar_bc"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintDimensionRatio="H,1440:150"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:tint="#F000FF"
-            android:scaleType="fitXY"
-            android:layout_marginBottom="50dp"
-            />
+            app:layout_constraintStart_toStartOf="parent">
 
-        <!-- Track bar background -->
-        <ImageView
-            android:id="@+id/progress_track"
-            android:layout_width="match_parent"
-            android:layout_height="8dp"
-            android:layout_gravity="center_vertical"
-            android:layout_marginTop="20dp"
-            android:background="#bbb"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/play"
-            android:layout_marginLeft="30dp"
-            android:layout_marginRight="30dp"/>
+            <ImageView
+                android:id="@+id/progress_track"
+                android:layout_width="match_parent"
+                android:layout_height="10dp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="13dp"
+
+                android:layout_marginRight="13dp"
+
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/prbar"
+                app:layout_constraintTop_toTopOf="parent" />
 
 
-        <ImageView
-            android:id="@+id/progressing_track"
-            android:layout_width="8dp"
-            android:layout_height="8dp"
-            android:layout_gravity="center_vertical"
-            android:background="#D100B3"
-            android:layout_marginTop="20dp"
-            app:layout_constraintTop_toBottomOf="@+id/play"
-            app:layout_constraintStart_toStartOf="@+id/progress_track"
-            />
+            <ImageView
+                android:id="@+id/progressing_track"
+                android:layout_width="8dp"
+                android:layout_height="13dp"
+                android:layout_gravity="center_vertical"
 
-        <!-- Movable thumb -->
-        <ImageView
-            android:id="@+id/progress_circle"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_gravity="center_vertical"
-            android:background="@drawable/play_circle"
-            app:layout_constraintBottom_toBottomOf="@+id/progress_track"
+                android:background="@drawable/heavily_rounded_corner"
 
-            app:layout_constraintStart_toStartOf="@+id/progress_track"
+                app:layout_constraintBottom_toBottomOf="@+id/progress_track"
+
+                app:layout_constraintStart_toStartOf="@+id/progress_track"
+                app:layout_constraintTop_toTopOf="@+id/progress_track" />
+
+            <!-- Movable thumb -->
+            <ImageView
+                android:id="@+id/progress_circle"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_gravity="center_vertical"
+                android:background="@drawable/play_circle"
+                app:layout_constraintBottom_toBottomOf="@+id/progress_track"
+
+                app:layout_constraintStart_toStartOf="@+id/progress_track"
 
 
-            app:layout_constraintTop_toTopOf="@+id/progress_track" />
+                app:layout_constraintTop_toTopOf="@+id/progress_track" />
 
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
