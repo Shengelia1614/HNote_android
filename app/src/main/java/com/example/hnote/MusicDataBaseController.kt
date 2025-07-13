@@ -37,6 +37,9 @@ class MusicDataBaseController(context: Context) :SQLiteOpenHelper(context, "Play
 
     fun updateLastPlayed(LastPlayed: String) {
         val sql = "UPDATE configvariables SET Value = ? WHERE Identifier = ?"
+
+
+        writableDatabase.execSQL(sql, arrayOf(LastPlayed, "LastPlayed"))
         writableDatabase.execSQL(sql, arrayOf(LastPlayed, "LastPlayed"))
     }
 

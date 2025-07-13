@@ -265,6 +265,306 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/image_display_screen"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toTopOf="@+id/cassette"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintDimensionRatio="H,100:78"
+            android:background="@drawable/image_display_bc"
+            >
+
+            <androidx.constraintlayout.widget.Guideline
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/imageGuideLineVertical"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.16"
+                >
+            </androidx.constraintlayout.widget.Guideline>
+            <androidx.constraintlayout.widget.Guideline
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/imageGuideLineVertical1"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.835"
+                >
+
+            </androidx.constraintlayout.widget.Guideline>
+            <androidx.constraintlayout.widget.Guideline
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/imageGuideLineHorizontal"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_percent="0.93"
+                >
+
+            </androidx.constraintlayout.widget.Guideline>
+            <androidx.constraintlayout.widget.Guideline
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/imageGuideLineHorizontal1"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_percent="0.076"
+                >
+
+            </androidx.constraintlayout.widget.Guideline>
+
+            <ImageView
+                android:id="@+id/SongImage"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                app:layout_constraintBottom_toTopOf="@+id/imageGuideLineHorizontal"
+                app:layout_constraintEnd_toStartOf="@+id/imageGuideLineVertical1"
+                app:layout_constraintStart_toStartOf="@+id/imageGuideLineVertical"
+                app:layout_constraintTop_toTopOf="@+id/imageGuideLineHorizontal1"
+                android:scaleType="fitCenter"
+                android:adjustViewBounds="true"
+                >
+
+            </ImageView>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/frequency_display"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@drawable/frequency_bc"
+            app:layout_constraintBottom_toTopOf="@+id/image_display_screen"
+            app:layout_constraintDimensionRatio="H,1440:378"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            >
+            <androidx.constraintlayout.widget.Guideline
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/freqGuideLineVertical"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.08"
+                >
+            </androidx.constraintlayout.widget.Guideline>
+            <androidx.constraintlayout.widget.Guideline
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/freqGuideLineVertical1"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.915"
+                >
+
+            </androidx.constraintlayout.widget.Guideline>
+
+
+
+
+            <!-- Bar 0 -->
+            <ImageView
+                android:id="@+id/bar0"
+                android:layout_width="8dp"
+                android:layout_height="8dp"
+                android:background="#FFA500"
+                android:layout_marginStart="5dp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="@id/freqGuideLineVertical" />
+
+            <!-- Bar 1 to 18 -->
+            <ImageView
+                android:id="@+id/bar1"
+                android:layout_width="8dp"
+                android:layout_height="8dp"
+                android:background="#FFA500"
+                android:layout_marginStart="9dp"
+                app:layout_constraintStart_toEndOf="@id/bar0"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent" />
+
+            <ImageView
+                android:id="@+id/bar2"
+                android:layout_width="8dp"
+                android:layout_height="8dp"
+                android:background="#FFA500"
+                android:layout_marginStart="9dp"
+                app:layout_constraintStart_toEndOf="@id/bar1"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent" />
+
+            <ImageView
+                android:id="@+id/bar3"
+                android:layout_width="8dp"
+                android:layout_height="8dp"
+                android:background="#FFA500"
+                android:layout_marginStart="9dp"
+                app:layout_constraintStart_toEndOf="@id/bar2"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent" />
+
+            <ImageView
+                android:id="@+id/bar4"
+                android:layout_width="8dp"
+                android:layout_height="8dp"
+                android:background="#FFA500"
+                android:layout_marginStart="9dp"
+                app:layout_constraintStart_toEndOf="@id/bar3"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent" />
+
+            <ImageView
+                android:id="@+id/bar5"
+                android:layout_width="8dp"
+                android:layout_height="8dp"
+                android:background="#FFA500"
+                android:layout_marginStart="9dp"
+                app:layout_constraintStart_toEndOf="@id/bar4"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent" />
+
+            <ImageView
+                android:id="@+id/bar6"
+                android:layout_width="8dp"
+                android:layout_height="8dp"
+                android:background="#FFA500"
+                android:layout_marginStart="9dp"
+                app:layout_constraintStart_toEndOf="@id/bar5"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent" />
+
+            <ImageView
+                android:id="@+id/bar7"
+                android:layout_width="8dp"
+                android:layout_height="8dp"
+                android:background="#FFA500"
+                android:layout_marginStart="9dp"
+                app:layout_constraintStart_toEndOf="@id/bar6"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent" />
+
+            <ImageView
+                android:id="@+id/bar8"
+                android:layout_width="8dp"
+                android:layout_height="8dp"
+                android:background="#FFA500"
+                android:layout_marginStart="9dp"
+                app:layout_constraintStart_toEndOf="@id/bar7"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent" />
+
+            <ImageView
+                android:id="@+id/bar9"
+                android:layout_width="8dp"
+                android:layout_height="8dp"
+                android:background="#FFA500"
+                android:layout_marginStart="9dp"
+                app:layout_constraintStart_toEndOf="@id/bar8"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent" />
+
+            <ImageView
+                android:id="@+id/bar10"
+                android:layout_width="8dp"
+                android:layout_height="8dp"
+                android:background="#FFA500"
+                android:layout_marginStart="9dp"
+                app:layout_constraintStart_toEndOf="@id/bar9"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent" />
+
+            <ImageView
+                android:id="@+id/bar11"
+                android:layout_width="8dp"
+                android:layout_height="8dp"
+                android:background="#FFA500"
+                android:layout_marginStart="9dp"
+                app:layout_constraintStart_toEndOf="@id/bar10"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent" />
+
+            <ImageView
+                android:id="@+id/bar12"
+                android:layout_width="8dp"
+                android:layout_height="8dp"
+                android:background="#FFA500"
+                android:layout_marginStart="9dp"
+                app:layout_constraintStart_toEndOf="@id/bar11"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent" />
+
+            <ImageView
+                android:id="@+id/bar13"
+                android:layout_width="8dp"
+                android:layout_height="8dp"
+                android:background="#FFA500"
+                android:layout_marginStart="9dp"
+                app:layout_constraintStart_toEndOf="@id/bar12"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent" />
+
+            <ImageView
+                android:id="@+id/bar14"
+                android:layout_width="8dp"
+                android:layout_height="8dp"
+                android:background="#FFA500"
+                android:layout_marginStart="9dp"
+                app:layout_constraintStart_toEndOf="@id/bar13"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent" />
+
+            <ImageView
+                android:id="@+id/bar15"
+                android:layout_width="8dp"
+                android:layout_height="8dp"
+                android:background="#FFA500"
+                android:layout_marginStart="9dp"
+                app:layout_constraintStart_toEndOf="@id/bar14"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent" />
+
+            <ImageView
+                android:id="@+id/bar16"
+                android:layout_width="8dp"
+                android:layout_height="8dp"
+                android:background="#FFA500"
+                android:layout_marginStart="9dp"
+                app:layout_constraintStart_toEndOf="@id/bar15"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent" />
+
+            <ImageView
+                android:id="@+id/bar17"
+                android:layout_width="8dp"
+                android:layout_height="8dp"
+                android:background="#FFA500"
+                android:layout_marginStart="9dp"
+                app:layout_constraintStart_toEndOf="@id/bar16"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent" />
+
+            <ImageView
+                android:id="@+id/bar18"
+                android:layout_width="8dp"
+                android:layout_height="8dp"
+                android:background="#FFA500"
+                android:layout_marginStart="9dp"
+                app:layout_constraintStart_toEndOf="@id/bar17"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent" />
+
+            <!-- Bar 19 - last bar, ends chain -->
+            <ImageView
+                android:id="@+id/bar19"
+                android:layout_width="8dp"
+                android:layout_height="8dp"
+                android:layout_marginStart="9dp"
+                android:background="#FFA500"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/freqGuideLineVertical1"
+                app:layout_constraintStart_toEndOf="@id/bar18"
+                app:layout_constraintTop_toTopOf="parent" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
