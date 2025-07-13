@@ -33,8 +33,10 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.viewpager2.widget.ViewPager2
+//import com.example.hnote.Player.Companion.visualizer
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlin.math.hypot
 
 
 class MainActivity : AppCompatActivity() {
@@ -42,6 +44,8 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var pagerAdapter: Adapter
     lateinit var animationController: AnimationController
+    lateinit public var audio : Audio
+    var visualizer: Visualizer? = null
 
     companion object{
         public lateinit var Play_lists_db: MusicDataBaseController
@@ -51,6 +55,7 @@ class MainActivity : AppCompatActivity() {
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
+
         super.onCreate(savedInstanceState)
         animationController = AnimationController()
 
@@ -93,7 +98,11 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+
         Play_lists_db = MusicDataBaseController(this)
+
+        audio =Audio(this)
+
 
         var allsongs= PlayList("all_songs",getAllAudioFilePaths())
         Log.d("db creation", "music count ${allsongs.MusicList.size} ")
@@ -113,6 +122,86 @@ class MainActivity : AppCompatActivity() {
 
 
     }
+
+    @UnstableApi
+    fun startFrequencyAnalyzer() {
+        val sessionId = audio.player.audioSessionId
+        if (sessionId == 0) {
+            Log.w("Visualizer", "Session ID is 0, cannot start Visualizer yet.")
+            return
+        } // no audio session yet
+
+        visualizer?.release() // release if already exists
+
+        visualizer = Visualizer(sessionId).apply {
+            captureSize = Visualizer.getCaptureSizeRange()[1] // max capture size
+
+            setDataCaptureListener(object : Visualizer.OnDataCaptureListener {
+                override fun onFftDataCapture(
+                    visualizer: Visualizer,
+                    fft: ByteArray,
+                    samplingRate: Int
+                ) {
+                    val n = 20
+                    val bucketSize = (fft.size / 2) / n
+                    val amps = FloatArray(n) { 0f }
+
+                    // FFT bytes: pairs of (real, imag) starting from index 2 (index 0 and 1 reserved)
+                    for (i in 0 until n) {
+                        var sum = 0f
+                        for (j in 0 until bucketSize) {
+                            val index = 2 + (i * bucketSize + j) * 2
+                            if (index + 1 >= fft.size) break
+                            val real = fft[index].toInt()
+                            val imag = fft[index + 1].toInt()
+                            val mag = hypot(real.toFloat(), imag.toFloat())
+                            sum += mag
+                        }
+                        amps[i] = sum / bucketSize // average magnitude in bucket
+                    }
+
+                    amps[0] = 0f
+
+                    val minAmp = amps.minOrNull() ?: 0f
+                    val maxAmp = amps.maxOrNull() ?: 1f
+                    val range = (maxAmp - minAmp).takeIf { it != 0f } ?: 1f  // avoid divide by 0
+
+                    for (k in amps.indices) {
+                        amps[k] = ((amps[k] - minAmp) / range) * 7f + 1f  // scaled to [1, 8]
+                    }
+
+
+                    Log.d("frequency_source","applaying frequency ${amps[2]}")
+                    latestAmplitudes = amps
+                }
+
+                override fun onWaveFormDataCapture(
+                    visualizer: Visualizer,
+                    waveform: ByteArray,
+                    samplingRate: Int
+                ) {
+                    // Not used here
+                }
+
+            }, Visualizer.getMaxCaptureRate() / 2, false, true)
+
+            enabled = true
+        }
+    }
+
+    fun stopFrequencyAnalyzer() {
+        visualizer?.release()
+        visualizer = null
+    }
+
+    // Call this anytime to get latest 20-band amplitudes scaled 0..2
+    fun getLatestFrequencyAmplitudes(): FloatArray {
+        return latestAmplitudes.copyOf()
+    }
+
+
+
+
 
     fun getAllAudioFilePaths(): List<Pair<String, String>> {
 //        val audioList = mutableListOf<String>()

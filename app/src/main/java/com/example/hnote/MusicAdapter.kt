@@ -6,6 +6,7 @@ import android.graphics.Bitmap
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.os.SystemClock
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -23,7 +24,7 @@ import androidx.media3.common.util.UnstableApi
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.hnote.MainActivity.Companion.Play_lists_db
-import com.example.hnote.Player.Companion.audio
+//import com.example.hnote.Player.Companion.audio
 //import com.example.hnote.Player.Companion.progresingbar
 //import com.example.hnote.Player.Companion.progress
 //import com.example.hnote.Player.Companion.rotation1
@@ -53,12 +54,12 @@ class MusicAdapter(private val songs: List<Pair<String, String>>, val ac_context
         holder.binding.root.setOnClickListener {
             Play_lists_db.updateLastPlayed(songs[position].second)
 
-            audio.player.stop()
+            mainActivity?.audio?.player?.stop()
 
             //audio =Audio(ac_context)
-            audio.setAudio()
+            mainActivity?.audio?.setAudio()
 
-            val bitmap: Bitmap? = audio.SongArtBitmap
+            val bitmap: Bitmap? = mainActivity?.audio?.SongArtBitmap
             if (bitmap != null) {
                 mainActivity?.GetPlayer()?.getBind()?.SongImage?.setImageBitmap(bitmap)
             } else {
@@ -69,7 +70,7 @@ class MusicAdapter(private val songs: List<Pair<String, String>>, val ac_context
 
 
 
-            audio.player.addListener(object : MediaPlayer.Listener {
+            mainActivity?.audio?.player?.addListener(object : MediaPlayer.Listener {
                 override fun onPlaybackStateChanged(playbackState: Int) {
                     if (playbackState == MediaPlayer.STATE_READY) {
                         //progress.cancel()
@@ -81,12 +82,12 @@ class MusicAdapter(private val songs: List<Pair<String, String>>, val ac_context
 
                         mainActivity?.animationController?.resetProgress()
                         mainActivity?.animationController?.pauseProgress()
-                        audioPlayerDuration=audio.player.duration
+                        audioPlayerDuration=mainActivity?.audio?.player?.duration!!
                         mainActivity?.animationController?.startProgress()
                         mainActivity?.animationController?.startRotation()
 
                         @UnstableApi
-                        mainActivity?.GetPlayer()?.startFrequencyAnalyzer()
+                        mainActivity?.startFrequencyAnalyzer()
                         Log.d("progress", "animation canceled")
                         //}
                         //if (::progresingbar.isInitialized){
@@ -113,14 +114,14 @@ class MusicAdapter(private val songs: List<Pair<String, String>>, val ac_context
 
 
             //audio.player.play()
-            //mainActivity?.GetPlayer()?.getBind()?.play?.setImageResource(R.drawable.pausebutton_bc)
-            mainActivity?.GetPlayer()?.Stop_update()
-
+            mainActivity?.GetPlayer()?.getBind()?.play?.setImageResource(R.drawable.pausebutton_bc)
+            //mainActivity?.GetPlayer()?.Stop_update()
+            mainActivity?.audio?.player?.pause()
             //mainActivity?.GetPlayer()?.myJob?.cancel()
 
 
-            mainActivity?.GetPlayer()?.onPauseTime=0L
-            mainActivity?.GetPlayer()?.playtime=0L
+            //mainActivity?.GetPlayer()?.onPauseTime=0L
+            //mainActivity?.GetPlayer()?.playtime=0L
             mainActivity?.GetPlayer()?.getBind()?.musicname?.text=songs[position].first
 
 
@@ -132,8 +133,13 @@ class MusicAdapter(private val songs: List<Pair<String, String>>, val ac_context
 //            rotation2.start()
 
 
-            mainActivity?.GetPlayer()?.Play_update((mainActivity as AppCompatActivity).lifecycleScope)
-
+            //mainActivity?.GetPlayer()?.Play_update((mainActivity as AppCompatActivity).lifecycleScope)
+            mainActivity?.audio?.player?.play()
+            playing = 1
+            frequencyPlayer=1
+            playtime=0
+            onPauseTime=0
+            playbackStartTime = SystemClock.elapsedRealtime()
 
             Log.d("CoroutineProblem","$playing")
 

@@ -40,7 +40,7 @@ class MusicDataBaseController(context: Context) :SQLiteOpenHelper(context, "Play
 
 
         writableDatabase.execSQL(sql, arrayOf(LastPlayed, "LastPlayed"))
-        writableDatabase.execSQL(sql, arrayOf(LastPlayed, "LastPlayed"))
+
     }
 
 

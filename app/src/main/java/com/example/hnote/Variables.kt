@@ -10,6 +10,10 @@ var CurrentPosition=1
 var audioStopped = 0
 var playing = 0
 var frequencyPlayer=0
+var playbackStartTime=0L
+var timerActive=0
+var playtime=0L
+var onPauseTime=0L
 
 var audioPlayerDuration=0L
 var progressTrackwidth = 0
